@@ -1404,18 +1404,44 @@ private static float getColorRedToBlack(double posZ, double zMax, int color) {
 	}
 	
 	public void addStormData(StormData tmp) {
-		if (this.getLocs().size()==0){
-			this.path = tmp.getPath();
-			this.fname = tmp.getFname();
-		}
-		int lastFrame = (int) ((double)getDimensions().get(7));
-		int firstFrame = (int) ((double)tmp.getDimensions().get(6));
-		for (int i = 0; i< tmp.getSize(); i++){
-			StormLocalization sl = tmp.getElement(i);
-			sl.setFrame(sl.getFrame()+lastFrame-firstFrame);
-			getLocs().add(sl);
-		}
-		
+	    if (tmp == null || tmp.getSize() == 0) {
+	        return;
+	    }
+
+	    if (this.getLocs().size() == 0) {
+	        this.path = tmp.getPath();
+	        this.fname = tmp.getFname();
+	        this.basename = tmp.getBasename();
+
+	        for (int i = 0; i < tmp.getSize(); i++) {
+	            StormLocalization sl = tmp.getElement(i);
+	            getLocs().add(new StormLocalization(
+	                    sl.getX(),
+	                    sl.getY(),
+	                    sl.getZ(),
+	                    sl.getFrame(),
+	                    sl.getIntensity(),
+	                    sl.getAngle()
+	            ));
+	        }
+	        return;
+	    }
+
+	    // Keep original frame numbers exactly as they are.
+	    // Do NOT shift frames here.
+	    for (int i = 0; i < tmp.getSize(); i++) {
+	        StormLocalization sl = tmp.getElement(i);
+	        getLocs().add(new StormLocalization(
+	                sl.getX(),
+	                sl.getY(),
+	                sl.getZ(),
+	                sl.getFrame(),
+	                sl.getIntensity(),
+	                sl.getAngle()
+	        ));
+	    }
+
+	    isSortedByFrame = false;
 	}
 	
 

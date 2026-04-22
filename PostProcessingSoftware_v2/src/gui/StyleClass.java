@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.io.Serializable;
 
 public class StyleClass implements Serializable{
-	private Color colorBackground = new Color(200,200,255);
-	private Color colorPanel = new Color(210,210,255);
+	private Color colorBackground = new Color(200, 240, 235); // very light turquoise
+	private Color colorPanel = new Color(180, 230, 225);   // slightly stronger turquoise
 	private Color colorInput = new Color(171,65,152);
 	private Color colorProcessing = new Color(101,194,148);
 	private Color colorOutput = new Color(88,197,199);
