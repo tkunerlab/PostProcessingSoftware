@@ -1007,29 +1007,43 @@ public class Utilities {
 				
 
 		}
-//Function that finds and returns a ArrayList of all paths in the given parent folder (path) that contain the folder name specified
+		// Function that finds and returns all matching paths in sorted order
 		public static ArrayList<String> findPaths(String path, String folderName) {
-			ArrayList<String> retPaths = new ArrayList<String>();
-			File parentFolder = new File(path);
-			if (!parentFolder.isDirectory()){
-				System.out.println("no directory specified as parent directory!");
-				return new ArrayList<String>();
-			}
-			try(Stream<Path> paths = Files.walk(Paths.get(path))){
-				paths.forEach(filePath -> {
-					Path lastFolder = filePath.getFileName();//gets Last Folder
-					if (lastFolder.toString().contains(Paths.get(folderName).toString())){//now only has to be contained
-						retPaths.add(filePath.toString());
-						System.out.println(filePath.toString());
-					}
-				});
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return retPaths;
-			
+
+		    ArrayList<String> retPaths = new ArrayList<String>();
+
+		    File parentFolder = new File(path);
+
+		    if (!parentFolder.isDirectory()) {
+		        System.out.println("No directory specified as parent directory!");
+		        return retPaths;
+		    }
+
+		    try (Stream<Path> paths = Files.walk(Paths.get(path))) {
+
+		        paths.forEach(filePath -> {
+
+		            Path lastPart = filePath.getFileName();
+
+		            if (lastPart != null &&
+		                lastPart.toString().contains(folderName)) {
+
+		                retPaths.add(filePath.toString());
+		            }
+		        });
+
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+
+		    Collections.sort(retPaths, String.CASE_INSENSITIVE_ORDER);
+
+		    System.out.println("Found " + retPaths.size() + " matching paths:");
+		    for (String p : retPaths) {
+		        System.out.println(p);
+		    }
+
+		    return retPaths;
 		}
-		
 }
 
